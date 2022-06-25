@@ -30,9 +30,9 @@ public class NBody{
 		String filename = args[2];
 
 		Planet[] planets = NBody.readPlanets(filename);
-		double UniRadius = NBody.readRadius(filename);
+		double radius = NBody.readRadius(filename);
 
-		StdDraw.setScale((-1)*UniRadius, UniRadius);
+		StdDraw.setScale((-1)*radius, radius);
 		StdDraw.picture(0,0, "images/starfield.jpg");
 
 		for (Planet item: planets){
