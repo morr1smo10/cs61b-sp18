@@ -69,11 +69,10 @@ public class LinkedListDeque<T> {
     public T removeFirst() {
         if (sentinel.next == sentinel) {
             return null;
-        }
-        else {
+        } else {
             Node temp = sentinel.next;
             sentinel.next = temp.next;
-            //line 74 and line 75 could switch place, but not the comment line case
+            //line 74 and line 76 could switch place, but not the comment line case
             temp.next.prev = sentinel;
             //sentinel.next.prev = sentinel; this case should follow original sequence
             size--;
@@ -84,11 +83,10 @@ public class LinkedListDeque<T> {
     public T removeLast() {
         if (sentinel.prev == sentinel) {
             return null;
-        }
-        else {
+        } else {
             Node temp = sentinel.prev;
             sentinel.prev = temp.prev;
-            temp.prev.next = sentinel; //line 85 and line 86 could switch place
+            temp.prev.next = sentinel; //line 88 and line 89 could switch place
             size--;
             return temp.item;
         }
@@ -98,7 +96,7 @@ public class LinkedListDeque<T> {
         Node temp = sentinel.next;
         T holder = null;
         for (int i = 0; i <= index; i++) {
-            if(temp.item == null) {
+            if (temp.item == null) {
                 return null;
             }
             holder = temp.item;
