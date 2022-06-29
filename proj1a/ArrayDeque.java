@@ -24,7 +24,6 @@ public class ArrayDeque<T>{
         nextFirst = newsize - 1;
         nextLast = size;
         array = temp;
-        size = newsize;
     }
 
     private int increment(int value) {
