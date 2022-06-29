@@ -11,7 +11,7 @@ public class ArrayDeque<T>{
        nextLast = 4;
     }
 
-    public void resize(){
+    private void resize(){
         if (nextFirst == nextLast){
             T[] temp = (T[]) new Object[array.length*2];
             System.arraycopy(array,0,temp,0,nextLast);
@@ -32,12 +32,12 @@ public class ArrayDeque<T>{
         else return;
     }
 
-    public int increment(int value){
+    private int increment(int value){
         return (value+1)%array.length;
     }
 
-    public int decrement(int value){
-        return (value-1)%array.length;
+    private int decrement(int value){
+        return (value-1+array.length)%array.length;
     }
 
     public void addFirst(T item){
@@ -102,15 +102,18 @@ public class ArrayDeque<T>{
     }
 
     /*
-    public ArrayDeque(ArrayDeque other){
-        ArrayDeque<T> temp = new ArrayDeque<T>();
-        temp.array = (T[]) new Object[other.array.length];
-        temp.nextFirst = other.nextFirst;
-        temp.nextLast = increment(increment(temp.nextFirst));
-        for (int i = 0; i<other.size; i++){
-            temp.addLast(); = other.get(i);
-        }
-        return temp;
+    public static void main (String args[]){
+        ArrayDeque<Integer> example = new ArrayDeque<Integer>();
+        example.addFirst(0)
+        example.addFirst(1)
+        example.size()
+        example.addLast(3)
+        example.size()
+        example.addLast(5)
+        example.size()
+        example.addFirst(7)
+        example.addFirst(8)
+        example.addFirst(9)
     }
 
      */

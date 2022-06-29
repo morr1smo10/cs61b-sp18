@@ -2,19 +2,19 @@ public class LinkedListDeque<T> {
     private Node sentinel;
     private int size;
 
-    private class Node{
+    private class Node {
         private Node prev;
         private T item;
         private Node next;
 
-        public Node (Node a, T b, Node c){
+        public Node(Node a, T b, Node c) {
             prev = a;
             item = b;
             next = c;
         }
     }
 
-    public LinkedListDeque(){
+    public LinkedListDeque() {
         sentinel = new Node(null, null, null);
         sentinel.prev = sentinel;
         sentinel.next = sentinel;
@@ -29,7 +29,7 @@ public class LinkedListDeque<T> {
     }
      */
 
-    public void addFirst(T item){
+    public void addFirst(T item) {
         sentinel.next.prev = new Node(sentinel, item, sentinel.next);
         sentinel.next = sentinel.next.prev;
         size++;
@@ -43,43 +43,48 @@ public class LinkedListDeque<T> {
     }
      */
 
-    public void addLast(T item){
+    public void addLast(T item) {
         sentinel.prev.next = new Node(sentinel.prev, item, sentinel);
         sentinel.prev = sentinel.prev.next;
         size++;
     }
 
-    public boolean isEmpty(){
-        if (size == 0) return true;
-        else return false;
+    public boolean isEmpty() {
+        return size == 0;
     }
 
-    public int size(){
+    public int size() {
         return size;
     }
 
-    public void printDeque(){
+    public void printDeque() {
         sentinel = sentinel.next;
-        while(sentinel.item != null){
+        while (sentinel.item != null) {
             System.out.print(sentinel.item + " ");
             sentinel = sentinel.next;
         }
         System.out.println();
     }
 
-    public T removeFirst(){
-        if(sentinel.next == null) return null;
+    public T removeFirst() {
+        if (sentinel.next == sentinel) {
+            return null;
+        }
         else {
             Node temp = sentinel.next;
-            sentinel.next = temp.next; //line 74 and line 75 could switch place, but not the comment line case
-            temp.next.prev = sentinel; //sentinel.next.prev = sentinel; this case should follow original sequence
+            sentinel.next = temp.next;
+            //line 74 and line 75 could switch place, but not the comment line case
+            temp.next.prev = sentinel;
+            //sentinel.next.prev = sentinel; this case should follow original sequence
             size--;
             return temp.item;
         }
     }
 
-    public T removeLast(){
-        if(sentinel.next == null) return null;
+    public T removeLast() {
+        if (sentinel.prev == sentinel) {
+            return null;
+        }
         else {
             Node temp = sentinel.prev;
             sentinel.prev = temp.prev;
@@ -102,28 +107,17 @@ public class LinkedListDeque<T> {
         return holder;
     }
 
-    private T RecHelper(Node node, int index) {
+    private T recHelper(Node node, int index) {
         if (node == sentinel) {
             return null;
         }
         if (index == 0) {
             return node.item;
         }
-        return RecHelper(node.next, index - 1);
+        return recHelper(node.next, index - 1);
     }
 
     public T getRecursive(int index) {
-        return RecHelper(sentinel.next, index);
-    }
-
-    public LinkedListDeque(LinkedListDeque other){
-        sentinel = new Node(null, null, null);
-        sentinel.prev = sentinel;
-        sentinel.next = sentinel;
-        size = 0;
-
-        for (int i = 0; i<other.size(); i++){
-            addLast((T) other.get(i));
-        }
+        return recHelper(sentinel.next, index);
     }
 }
