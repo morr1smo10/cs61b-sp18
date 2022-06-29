@@ -4,117 +4,110 @@ public class ArrayDeque<T>{
     private int nextLast;
     private T[] array;
 
-    public ArrayDeque(){
+    public ArrayDeque() {
        array = (T[]) new Object[8];
        size = 0;
        nextFirst = 3;
        nextLast = 4;
     }
 
-    private void resize(){
-        if (nextFirst == nextLast){
-            T[] temp = (T[]) new Object[array.length*2];
-            System.arraycopy(array,0,temp,0,nextLast);
-            System.arraycopy(array,nextFirst+1,temp,nextFirst+array.length+1,size-nextFirst);
-            nextFirst = nextFirst + array.length;
-            array = temp;
+    private void resize(int newsize) {
+        T[] temp = (T[]) new Object[newsize];
+        if(nextFirst >= nextLast - 1) {
+            int rear = array.length - nextFirst;
+            System.arraycopy(array, increment(nextFirst), temp, 0, rear - 1);
+            System.arraycopy(array, 0, temp, rear - 1, nextLast);
         }
-        else if (array.length >= 16){
-            if((double) size < (array.length/4.0)){
-                T[] temp = (T[]) new Object[array.length/2];
-                System.arraycopy(array,0,temp,0,nextLast);
-                System.arraycopy(array,nextFirst+1,temp,nextFirst-(array.length+1)/2+1,array.length-nextFirst-1);
-                nextFirst = nextFirst-(array.length+1)/2;
-                array = temp;
-            }
-            else return;
+        else {
+            System.arraycopy(array, increment(nextFirst), temp, 0, size);
         }
-        else return;
+        nextFirst = newsize - 1;
+        nextLast = size;
+        array = temp;
     }
 
-    private int increment(int value){
+    private int increment(int value) {
         return (value+1)%array.length;
     }
 
-    private int decrement(int value){
+    private int decrement(int value) {
         return (value-1+array.length)%array.length;
     }
 
-    public void addFirst(T item){
-        resize();
+    public void addFirst(T item) {
+        if (size == array.length) {
+            resize(array.length * 2);
+        }
         array[nextFirst] = item;
         nextFirst = decrement(nextFirst);
         size++;
     }
 
-    public void addLast(T item){
-        resize();
+    public void addLast(T item) {
+        if (size == array.length) {
+            resize(array.length * 2);
+        }
         array[nextLast] = item;
         nextLast = increment(nextLast);
         size++;
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return size == 0;
     }
 
-    public int size(){
+    public int size() {
         return size;
     }
 
-    public void printDeque(){
-        if (nextLast > nextFirst){
-            for (int i = nextFirst+1; i < nextLast; i++){
+    public void printDeque() {
+        if (nextLast > nextFirst) {
+            for (int i = nextFirst+1; i < nextLast; i++) {
                 System.out.print(array[i] + " ");
             }
             System.out.println();
         }
         else {
-            for (int i = nextFirst+1; i < array.length; i++){
+            for (int i = nextFirst+1; i < array.length; i++) {
                 System.out.print(array[i] + " ");
             }
-            for (int i = 0; i < nextLast; i++){
+            for (int i = 0; i < nextLast; i++) {
                 System.out.print(array[i] + " ");
             }
             System.out.println();
         }
     }
 
-    public T removeFirst(){
-        if(size == 0) return null;
-        resize();
+    public T removeFirst() {
+        if (size == 0) {
+            return null;
+        }
+        if (array.length >= 16 && (double) size < (array.length / 4.0)) {
+            resize(array.length / 2);
+        }
         nextFirst = increment(nextFirst);
         size--;
         return array[nextFirst];
     }
 
-    public T removeLast(){
-        if(size == 0) return null;
-        resize();
+    public T removeLast() {
+        if(size == 0) {
+            return null;
+        }
+        if (array.length >= 16 && (double) size < (array.length / 4.0)) {
+            resize(array.length / 2);
+        }
         nextLast = decrement(nextLast);
         size--;
         return array[nextLast];
     }
 
-    public T get(int index){
-        if (index >= size) return null;
-        else return array[(nextFirst+1+index)%array.length];
+    public T get(int index) {
+        if (index >= size) {
+            return null;
+        }
+        else {
+            return array[(nextFirst+1+index)%array.length];
+        }
     }
-
-    /*
-    public static void main (String args[]){
-        ArrayDeque<Integer> example = new ArrayDeque<Integer>();
-        example.addFirst(0)
-        example.addFirst(1)
-        example.size()
-        example.addLast(3)
-        example.size()
-        example.addLast(5)
-        example.size()
-        example.addFirst(7)
-        example.addFirst(8)
-        example.addFirst(9)
-    }
-
-     */
 }
