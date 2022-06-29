@@ -24,6 +24,7 @@ public class ArrayDeque<T>{
         nextFirst = newsize - 1;
         nextLast = size;
         array = temp;
+        size = newsize;
     }
 
     private int increment(int value) {
@@ -103,7 +104,7 @@ public class ArrayDeque<T>{
     }
 
     public T get(int index) {
-        if (index >= size) {
+        if (index < 0 || index >= size || isEmpty()) {
             return null;
         }
         else {
