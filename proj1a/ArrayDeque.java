@@ -16,7 +16,7 @@ public class ArrayDeque<T> {
         if (nextFirst >= nextLast - 1) {
             int rear = array.length - nextFirst;
             System.arraycopy(array, increment(nextFirst), temp, 0, rear - 1);
-            System.arraycopy(array, 0, temp, rear - 1, nextLast);
+            System.arraycopy(array, 0, temp, rear - 1, size - (rear - 1));
         } else {
             System.arraycopy(array, increment(nextFirst), temp, 0, size);
         }
