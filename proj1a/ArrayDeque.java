@@ -60,7 +60,7 @@ public class ArrayDeque<T> {
     }
 
     public void printDeque() {
-        if (nextLast > nextFirst) {
+        if (nextLast > nextFirst + 1) {
             for (int i = nextFirst + 1; i < nextLast; i++) {
                 System.out.print(array[i] + " ");
             }
