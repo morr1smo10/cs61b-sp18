@@ -67,7 +67,7 @@ public class World {
 
     public static TETile[][] newGame(TERenderer ter, long seed) {
         Random random = new Random(seed);
-        ter.initialize(WIDTH, HEIGHT);
+        //ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
@@ -85,7 +85,7 @@ public class World {
         }
         w.addDoor(world, random);
         w.addPlayer(world, random);
-        ter.renderFrame(world);
+        //ter.renderFrame(world);
         return world;
     }
 
