@@ -13,9 +13,33 @@ public class World {
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
 
+    //an arraylist that contain rooms
     private List<Room> existingRoom = new ArrayList<>();
 
+    //an arraylist that contain hallways
     private List<Room> existingHallway = new ArrayList<>();
+
+    //this record the player's position
+    private Position playerPos;
+
+    //this record the door's position
+    private Position doorPos;
+
+    public Position getPlayerPos() {
+        return playerPos;
+    }
+
+    public void setPlayPos(Position p) {
+        playerPos = p;
+    }
+
+    public Position getDoorPos() {
+        return doorPos;
+    }
+
+    public void setDoorPos(Position p) {
+        doorPos = p;
+    }
 
     //add one new room to the world, if overlapped & out of bound, add new room until meet condition
     public void addRoom(TETile[][] world, Random random) {
@@ -51,6 +75,7 @@ public class World {
             temp = new Position(RandomUtils.uniform(random, 1, WIDTH - 1),
                     RandomUtils.uniform(random, 1, HEIGHT - 1));
         }
+        doorPos = new Position(temp.getXpos(), temp.getYpos());
         world[temp.getXpos()][temp.getYpos()] = Tileset.LOCKED_DOOR;
     }
 
@@ -62,67 +87,42 @@ public class World {
             temp = new Position(RandomUtils.uniform(random, 1, WIDTH - 1),
                     RandomUtils.uniform(random, 1, HEIGHT - 1));
         }
+        playerPos = new Position(temp.getXpos(), temp.getYpos());
         world[temp.getXpos()][temp.getYpos()] = Tileset.PLAYER;
     }
 
-    public static TETile[][] newGame(TERenderer ter, long seed) {
+    //establish a new game
+    public TETile[][] newGame(long seed) {
         Random random = new Random(seed);
-        //ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
                 world[x][y] = Tileset.NOTHING;
             }
         }
-        World w = new World();
         int x = RandomUtils.uniform(random, 20, 25);
         for (int i = 0; i < x; i++) {
-            w.addRoom(world, random);
+            addRoom(world, random);
         }
-        w.sortInitialX();
-        for (int i = 0; i < w.existingRoom.size() - 1; i++) {
-            w.addHallway(world, w.existingRoom.get(i), w.existingRoom.get(i + 1), random);
+        sortInitialX();
+        for (int i = 0; i < existingRoom.size() - 1; i++) {
+            addHallway(world, existingRoom.get(i), existingRoom.get(i + 1), random);
         }
-        w.addDoor(world, random);
-        w.addPlayer(world, random);
-        //ter.renderFrame(world);
+        addDoor(world, random);
+        addPlayer(world, random);
         return world;
     }
 
-/*
-    public static void main(String[] args) {
-        TERenderer ter = new TERenderer();
-        ter.initialize(WIDTH, HEIGHT);
-        Random random = new Random();
-
-        TETile[][] world = new TETile[WIDTH][HEIGHT];
-        for (int x = 0; x < WIDTH; x += 1) {
-            for (int y = 0; y < HEIGHT; y += 1) {
-                world[x][y] = Tileset.NOTHING;
-            }
+    //move one step according to the given character, and update the player position
+    public TETile[][] oneStep(TETile[][] world, char ch) {
+        Position newPos = playerPos.move(ch);
+        if (world[newPos.getXpos()][newPos.getYpos()].character() == '#') {
+            return world;
+        } else {
+            world[newPos.getXpos()][newPos.getYpos()] = Tileset.PLAYER;
+            world[getPlayerPos().getXpos()][getPlayerPos().getYpos()] = Tileset.FLOOR;
+            setPlayPos(newPos);
+            return world;
         }
-
-        World w = new World();
-
-        int x = RandomUtils.uniform(random, 20, 25);
-
-        for (int i = 0; i < x; i++){
-            w.addRoom(world);
-        }
-
-        w.sortInitialX();
-
-        for (int i = 0; i < w.existingRoom.size() - 1; i++){
-            w.addHallway(world,w.existingRoom.get(i), w.existingRoom.get(i+1));
-        }
-
-        w.addDoor(world);
-
-        w.addPlayer(world);
-
-        ter.renderFrame(world);
     }
-
- */
-
 }

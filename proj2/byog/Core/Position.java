@@ -1,10 +1,11 @@
 package byog.Core;
 
+import java.io.Serializable;
 import byog.TileEngine.TETile;
 
 import java.util.Random;
 
-public class Position {
+public class Position implements Serializable{
     private int xpos;
     private int ypos;
 
@@ -58,6 +59,7 @@ public class Position {
         }
     }
 
+    //check whether it's a good place to put door (one side nothing, one side floor)
     public boolean checkDoor(TETile[][] world) {
         if (world[getXpos()][getYpos()].character() == '#') {
             if (world[getXpos()][getYpos() - 1].character() == '·'
@@ -79,4 +81,26 @@ public class Position {
         }
         return false;
     }
+
+
+    //move according the input char, and return the position after move
+    public Position move (char ch){
+        if (ch == 'd') {
+            return new Position(getXpos() + 1, getYpos());
+        } else if (ch == 'a') {
+            return new Position(getXpos() - 1, getYpos());
+        } else if (ch == 's') {
+            return new Position(getXpos(), getYpos() - 1);
+        } else if (ch == 'w') {
+            return new Position(getXpos(), getYpos() + 1);
+        } else {
+            return this;
+        }
+    }
+
+    //check whether two positions equal, in the case of win the game
+    public boolean equal (Position p) {
+        return getXpos() == p.getXpos() && getYpos() == p.getYpos();
+    }
+
 }
